@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tran.mapper.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.tran.model.Goods" >
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="goods_unit" property="goodsUnit" jdbcType="VARCHAR" />
+    <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+    <result column="goods_type" property="goodsType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="goods" >
+    goods_code, goods_unit, goods_name, goods_price,goods_type
+  </sql>
+  <select id="findAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="goods" />
+    from goods
+  </select>
+  <select id="findOne" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="goods" />
+    from goods
+    where goods_code = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from goods
+    where goods_code = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tran.model.Goods" >
+    insert into goods (goods_code, goods_name, goods_unit,goods_type,
+      goods_price)
+    values (#{goodsCode,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{goodsUnit,jdbcType=VARCHAR}, 
+      #{goodsType,jdbcType=VARCHAR},#{goodsPrice,jdbcType=DECIMAL})
+  </insert>
+  
+  <update id="modify" parameterType="com.tran.model.Goods" >
+    update goods
+    <set >
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsUnit != null" >
+        goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsType != null" >
+        goods_type = #{goodsType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where goods_code = #{goodsCode,jdbcType=VARCHAR}
+  </update>
+</mapper>
